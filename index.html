@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARD System Telecom | A Infraestrutura Definitiva</title>
+  <meta name="description" content="Sistemas inteligentes, elétricos e de monitoramento integrados para quem não pode lidar com falhas.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #0A1128;
+      --bg-surface: #101835;
+      --bg-glass: rgba(10, 17, 40, 0.7);
+      --accent: #FF6B00;
+      --accent-glow: rgba(255, 107, 0, 0.25);
+      --text-main: #FFFFFF;
+      --text-muted: #B0B4C0;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 16px;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* NOISE TEXTURE OVERLAY */
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.04; pointer-events: none; z-index: 9999;
+    }
+
+    /* Subtle Radial Gradients */
+    .glow-bg {
+      position: absolute; width: 60vw; height: 60vw;
+      background: radial-gradient(circle, rgba(29, 53, 131, 0.3) 0%, transparent 60%);
+      top: -20vw; right: -20vw; z-index: -1; pointer-events: none;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; border-radius: 8px; }
+    
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5 { font-family: 'Syne', sans-serif; color: var(--text-main); letter-spacing: -0.02em; }
+    .title-xl { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+    .title-lg { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.1; margin-bottom: 20px; }
+    .subtitle { color: var(--text-muted); font-size: 1.15rem; max-width: 600px; font-weight: 400; line-height: 1.5; margin-bottom: 32px; }
+    
+    .text-accent { color: var(--accent); }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 16px 36px; border-radius: 100px;
+      font-weight: 600; font-size: 1rem; font-family: 'Inter', sans-serif;
+      transition: var(--transition); cursor: pointer; border: none;
+    }
+    .btn-primary { 
+      background-color: var(--accent); color: #fff; 
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .btn-primary:hover { 
+      transform: translateY(-4px); box-shadow: 0 12px 32px rgba(255, 107, 0, 0.4);
+    }
+    .btn-secondary {
+      background-color: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-main);
+    }
+    .btn-secondary:hover { border-color: var(--accent); background-color: rgba(255,255,255,0.05); transform: translateY(-4px); }
+
+    /* Header */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 24px 0; transition: var(--transition); border-bottom: 1px solid transparent;
+    }
+    header.scrolled {
+      padding: 12px 0; background-color: var(--bg-glass);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 40px; }
+    .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s; }
+    .nav-links a:hover { color: var(--text-main); }
+    
+    /* Hero Split Layout */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 120px; position: relative; overflow: hidden; }
+    .hero-split { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: center; }
+    
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background-color: rgba(255, 107, 0, 0.1); color: var(--accent);
+      padding: 8px 16px; border-radius: 100px; font-size: 0.85rem; font-weight: 600;
+      margin-bottom: 24px; border: 1px solid rgba(255, 107, 0, 0.2);
+    }
+    .hero-buttons { display: flex; gap: 16px; }
+
+    /* Hero Visual Right Side */
+    .hero-visual { position: relative; height: 500px; display: flex; align-items: center; justify-content: center; }
+    .hero-circle {
+      width: 400px; height: 400px; border-radius: 50%;
+      background: conic-gradient(from 180deg at 50% 50%, var(--accent) 0deg, rgba(10,17,40,0) 180deg, var(--accent) 360deg);
+      position: absolute; filter: blur(40px); opacity: 0.3; animation: spin 10s linear infinite;
+    }
+    .float-card {
+      position: absolute; background: var(--bg-glass); border: 1px solid var(--border);
+      backdrop-filter: blur(12px); padding: 24px; border-radius: var(--radius);
+      display: flex; align-items: center; gap: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      z-index: 2; animation: float 6s ease-in-out infinite;
+    }
+    .float-card i { font-size: 2rem; color: var(--accent); }
+    .fc-1 { top: 20%; left: 10%; animation-delay: 0s; }
+    .fc-2 { bottom: 20%; right: 10%; animation-delay: -3s; }
+    
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+    /* Brands Carousel */
+    .brands-section { padding: 40px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-surface); overflow: hidden; }
+    .brands-track { display: flex; gap: 80px; align-items: center; width: max-content; animation: scroll-left 30s linear infinite; }
+    .brands-track div { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--text-muted); opacity: 0.5; transition: var(--transition); letter-spacing: 0.05em; }
+    .brands-track div:hover { opacity: 1; color: #fff; }
+    @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* Bento Box Grid */
+    .bento-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(280px, auto));
+      gap: 24px; margin-top: 64px;
+    }
+    .bento-item {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 40px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      transition: var(--transition); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .bento-item:nth-child(1) { grid-column: span 2; grid-row: span 2; } 
+    .bento-item:nth-child(2) { grid-column: span 2; grid-row: span 1; } 
+    .bento-item:nth-child(3) { grid-column: span 1; grid-row: span 1; } 
+    .bento-item:nth-child(4) { grid-column: span 1; grid-row: span 1; } 
+    
+    .bento-item::before {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+      background: linear-gradient(to top, rgba(255, 107, 0, 0.1), transparent);
+      opacity: 0; transition: var(--transition); pointer-events: none;
+    }
+    .bento-item:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 30px rgba(255,107,0,0.1); }
+    .bento-item:hover::before { opacity: 1; }
+    
+    .bento-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: auto; transition: transform 0.3s; }
+    .bento-item:hover .bento-icon { transform: scale(1.1); }
+    .bento-item h3 { font-size: 1.5rem; margin-bottom: 12px; }
+    .bento-item p { color: var(--text-muted); font-size: 1rem; }
+
+    /* Timeline & Hook */
+    .diferencial-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+    .hook-box {
+      background: linear-gradient(135deg, var(--accent), #d95a00); border-radius: var(--radius); padding: 48px;
+      color: #fff; box-shadow: 0 24px 60px rgba(255, 107, 0, 0.3); position: relative; overflow: hidden;
+    }
+    .hook-box::after {
+      content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+      position: absolute; right: -20px; bottom: -20px; font-size: 10rem; opacity: 0.1;
+    }
+    .hook-box h3 { font-size: 2.2rem; color: #fff; margin-bottom: 24px; line-height: 1.2; }
+    .hook-box p { font-size: 1.15rem; font-weight: 500; opacity: 0.95; }
+
+    .timeline { border-left: 2px solid rgba(255,107,0,0.3); padding-left: 40px; margin-top: 40px; }
+    .tl-item { position: relative; margin-bottom: 48px; }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-item::before {
+      content: ''; position: absolute; left: -49px; top: 4px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--bg-color); border: 2px solid var(--accent);
+      transition: var(--transition);
+    }
+    .tl-item:hover::before { background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+    .tl-item h4 { font-size: 1.25rem; margin-bottom: 8px; }
+    .tl-item p { color: var(--text-muted); }
+
+    /* Autoridade */
+    .autoridade { background: var(--bg-surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 120px 0; }
+    .autoridade-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; align-items: center; }
+    .autoridade-img { 
+      background: var(--bg-color); border-radius: var(--radius); border: 1px solid var(--border);
+      aspect-ratio: 4/5; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .autoridade-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+
+    /* Testimonials Carousel (Swiper) */
+    .testimonials-section { padding: 120px 0; overflow: hidden; }
+    .swiper-container { width: 100%; overflow: visible; }
+    .swiper-slide { height: auto; }
+    .testimonial-card {
+      background: var(--bg-surface); padding: 48px; border-radius: var(--radius);
+      border: 1px solid var(--border); transition: var(--transition); height: 100%;
+      display: flex; flex-direction: column;
+    }
+    .testimonial-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 16px 32px rgba(0,0,0,0.4); }
+    .quote-icon { color: var(--accent); font-size: 2.5rem; margin-bottom: 24px; opacity: 0.4; }
+    .testimonial-card p.review { font-size: 1.15rem; margin-bottom: 32px; flex-grow: 1; font-style: italic; color: #fff; }
+
+    /* Map Section (Colorful Map) */
+    .map-section { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+    .map-wrapper { height: 450px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    /* Removed the dark mode filter to make it colorful as requested */
+    .map-wrapper iframe { width: 100%; height: 100%; border: 0; }
+
+    /* Smart Contact Form */
+    .smart-form { background: var(--bg-surface); padding: 56px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+    .form-group { position: relative; margin-bottom: 32px; }
+    .form-control {
+      width: 100%; padding: 20px 24px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);
+      font-size: 1.05rem; font-family: 'Inter', sans-serif; transition: var(--transition);
+      outline: none;
+    }
+    .form-control:focus, .form-control:not(:placeholder-shown) { border-color: var(--accent); background: rgba(255, 107, 0, 0.05); }
+    
+    .floating-label {
+      position: absolute; left: 24px; top: 22px; color: var(--text-muted);
+      transition: var(--transition); pointer-events: none; font-size: 1rem;
+    }
+    .form-control:focus ~ .floating-label, .form-control:not(:placeholder-shown) ~ .floating-label {
+      top: -12px; left: 16px; font-size: 0.85rem; color: var(--accent);
+      background: var(--bg-surface); padding: 0 8px; border-radius: 4px;
+    }
+    textarea.form-control { min-height: 150px; resize: none; }
+    select.form-control { appearance: none; cursor: pointer; }
+    
+    .lgpd-notice { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 8px; margin-top: 24px; }
+    .lgpd-notice i { color: #22c55e; margin-top: 4px; }
+
+    /* Smart WhatsApp Float */
+    .wa-float-container { position: fixed; bottom: 40px; right: 40px; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+    .wa-balloon {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      padding: 16px 24px; border-radius: 12px; font-size: 0.95rem; color: var(--text-main);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; transform: translateY(20px);
+      transition: var(--transition); pointer-events: none; border-bottom-right-radius: 4px;
+    }
+    .wa-float-container:hover .wa-balloon { opacity: 1; transform: translateY(0); }
+    
+    .wa-btn {
+      width: 64px; height: 64px; background-color: #25D366; color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; box-shadow: 0 8px 32px rgba(37, 211, 102, 0.4);
+      transition: var(--transition); cursor: pointer; text-decoration: none;
+    }
+    .wa-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(37, 211, 102, 0.6); }
+
+    /* Footer */
+    footer { background: #050810; padding: 100px 0 40px; border-top: 1px solid var(--border); margin-top: 120px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; margin-bottom: 80px; }
+    .footer-links a { color: var(--text-muted); display: block; margin-bottom: 12px; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-main); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-split, .bento-grid { grid-template-columns: 1fr; }
+      .bento-item:nth-child(n) { grid-column: span 1; grid-row: auto; min-height: 250px; }
+      .diferencial-grid, .autoridade-grid, .map-section { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .hero { padding-top: 160px; text-align: center; }
+      .hero-content { align-items: center; }
+      .hero-buttons { justify-content: center; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 768px) {
+      .title-xl { font-size: 2.5rem; }
+      .title-lg { font-size: 2.2rem; }
+      .hook-box { padding: 32px; }
+      .smart-form { padding: 32px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .wa-float-container { bottom: 20px; right: 20px; }
+      .wa-btn { width: 56px; height: 56px; font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <header id="mainHeader">
+    <div class="container header-inner">
+      <a href="#" class="logo">ARD <span>S.</span></a>
+      <nav class="nav-links">
+        <a href="#solucoes">Soluções</a>
+        <a href="#diferencial">O Diferencial</a>
+        <a href="#autoridade">Quem Somos</a>
+        <a href="#cobertura">Cobertura</a>
+      </nav>
+      <a href="#contato" class="btn btn-primary" style="padding: 12px 28px;">Agendar Visita</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-split">
+        <div class="hero-content" data-aos="fade-right" data-aos-duration="1200">
+          <div class="status-badge">Soluções Corporativas & Condominiais</div>
+          <h1 class="title-xl">A Infraestrutura <span class="text-accent">Definitiva</span> para a Segurança da sua Empresa.</h1>
+          <p class="subtitle">Sistemas inteligentes, elétricos e de monitoramento integrados para quem não pode lidar com falhas.</p>
+          <div class="hero-buttons">
+            <a href="#contato" class="btn btn-primary">Falar com Especialista</a>
+            <a href="#solucoes" class="btn btn-secondary">Nossas Soluções</a>
+          </div>
+        </div>
+        
+        <div class="hero-visual" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+          <div class="hero-circle"></div>
+          <div class="float-card fc-1">
+            <i class="fa-solid fa-server"></i>
+            <div>
+              <h4 style="font-family:'Inter'; font-size:1rem; margin-bottom:2px;">Servidores Estruturados</h4>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height:1;">Operação 24h sem quedas</p>
+            </div>
+          </div>
+          <div class="float-card fc-2">
+            <i class="fa-solid fa-shield-check"></i>
+            <div>
+              <h4 style="font-family:'Inter'; font-size:1rem; margin-bottom:2px;">CFTV & Acesso</h4>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height:1;">Monitoramento Full HD</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brands Infinite Scroll Carousel -->
+    <div class="brands-section" data-aos="fade-in">
+      <div class="brands-track">
+        <div>intelbras</div>
+        <div>LEGRAND</div>
+        <div>FURUKAWA</div>
+        <div>HDL</div>
+        <div>Control iD</div>
+        
+        <div>intelbras</div>
+        <div>LEGRAND</div>
+        <div>FURUKAWA</div>
+        <div>HDL</div>
+        <div>Control iD</div>
+        
+        <div>intelbras</div>
+        <div>LEGRAND</div>
+        <div>FURUKAWA</div>
+        <div>HDL</div>
+      </div>
+    </div>
+
+    <!-- Bento Box Grid Section -->
+    <section id="solucoes" style="padding: 120px 0;">
+      <div class="container">
+        <h2 class="title-lg" data-aos="fade-up">Soluções de Engenharia</h2>
+        <p class="subtitle" data-aos="fade-up" data-aos-delay="100">Projetadas com precisão para máxima estabilidade.</p>
+        
+        <div class="bento-grid">
+          <div class="bento-item" data-aos="fade-up" data-aos-delay="100">
+            <i class="fa-solid fa-building-shield bento-icon"></i>
+            <h3>Manutenção em Condomínios</h3>
+            <p>Atuação preventiva e corretiva imediata. Garantimos que portarias virtuais e sistemas de vigilância não sofram apagões.</p>
+          </div>
+          
+          <div class="bento-item" data-aos="fade-up" data-aos-delay="200">
+            <i class="fa-solid fa-camera-security bento-icon"></i>
+            <h3>CFTV de Alta Resolução</h3>
+            <p>Monitoramento 24h impecável. Câmeras IP, analíticos de vídeo e gravação em nuvem à prova de violações.</p>
+          </div>
+          
+          <div class="bento-item" data-aos="fade-up" data-aos-delay="300">
+            <i class="fa-solid fa-bolt bento-icon"></i>
+            <h3>Elétrica & Infra</h3>
+            <p>Cabeamento estruturado, quadros de força e adequação completa de estabilidade elétrica.</p>
+          </div>
+          
+          <div class="bento-item" data-aos="fade-up" data-aos-delay="400">
+            <i class="fa-solid fa-phone-intercom bento-icon"></i>
+            <h3>Interfones e Acessos</h3>
+            <p>Comunicação condominial clara, catracas e biometria facial para controle absoluto.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diferencial & Hook -->
+    <section id="diferencial" style="padding: 120px 0; background: var(--bg-surface); border-top: 1px solid var(--border);">
+      <div class="container diferencial-grid">
+        <div data-aos="fade-right">
+          <h2 class="title-lg">O Diferencial Ard System</h2>
+          <p class="subtitle">Atendimento tático, desde o projeto até o suporte vitalício.</p>
+          
+          <div class="timeline">
+            <div class="tl-item">
+              <h4>Diagnóstico Técnico</h4>
+              <p>Mapeamento de vulnerabilidades estruturais e elétricas.</p>
+            </div>
+            <div class="tl-item">
+              <h4>Engenharia de Projeto</h4>
+              <p>Desenho da topologia de rede e alocação precisa de hardware.</p>
+            </div>
+            <div class="tl-item">
+              <h4>Instalação Rápida</h4>
+              <p>Equipe própria e treinada. Sem sujeira, sem improvisos.</p>
+            </div>
+            <div class="tl-item">
+              <h4>Suporte Ativo</h4>
+              <p>Monitoramento de integridade dos equipamentos em tempo real.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hook-box" data-aos="zoom-in" data-aos-delay="200">
+          <h3>Locação Inteligente</h3>
+          <p>Esqueça os altos custos de implantação. Oferecemos o modelo de comodato onde, <strong>após 36 meses, a infraestrutura e os equipamentos passam a ser 100% seus.</strong></p>
+          <a href="#contato" class="btn" style="background: #fff; color: var(--accent); margin-top: 40px;">Solicitar Proposta</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Autoridade (3D Image Concept) -->
+    <section id="autoridade" class="autoridade">
+      <div class="container autoridade-grid">
+        <div class="autoridade-img" data-aos="fade-right">
+          <img src="dono.png" alt="Especialista Ard System" onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(45deg, #0A1128, #101835)';">
+          <div style="position:absolute; bottom: 24px; left: 24px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 8px;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Engenharia e Projetos</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Ard System</p>
+          </div>
+        </div>
+        <div data-aos="fade-left">
+          <h2 class="title-lg">Quem cuida da sua segurança.</h2>
+          <p class="subtitle" style="margin-bottom: 24px;">A Ard System não é uma agência de vendas genérica, é uma empresa de infraestrutura focada em resolver os gargalos do mercado corporativo.</p>
+          <p style="color: var(--text-muted); font-size: 1.1rem;">Trabalhamos apenas com o que há de mais moderno em controle de acessos, telecom e CFTV, assegurando que o síndico e o administrador não tenham dor de cabeça com manutenções intermináveis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos Carousel -->
+    <section class="testimonials-section">
+      <div class="container">
+        <h2 class="title-lg" style="text-align: center; margin-bottom: 16px;" data-aos="fade-up">Aprovado por quem exige o melhor</h2>
+        <p class="subtitle" style="text-align: center; margin: 0 auto 64px;" data-aos="fade-up" data-aos-delay="100">Feedback de clientes reais sobre nossas implantações.</p>
+        
+        <!-- Swiper -->
+        <div class="swiper-container mySwiper" data-aos="fade-up" data-aos-delay="200">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="testimonial-card">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="review">"Trocaram todo o cabeamento do nosso condomínio e instalaram reconhecimento facial. Zero falhas desde a implantação. Equipe fantástica."</p>
+                <div>
+                  <h4 style="font-size: 1.2rem;">Valter</h4>
+                  <p style="color: var(--text-muted); font-size: 0.9rem;">Síndico Condomínio Jardins</p>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="testimonial-card">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="review">"O modelo de locação de 36 meses salvou o caixa da nossa empresa. A infraestrutura montada é impecável, limpa e funcional."</p>
+                <div>
+                  <h4 style="font-size: 1.2rem;">Sollary</h4>
+                  <p style="color: var(--text-muted); font-size: 0.9rem;">Administração Corporativa</p>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="testimonial-card">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="review">"Profissionalismo que falta no mercado de segurança. O diagnóstico foi preciso e a instalação foi feita em tempo recorde sem causar transtornos."</p>
+                <div>
+                  <h4 style="font-size: 1.2rem;">Condomínio Alpha</h4>
+                  <p style="color: var(--text-muted); font-size: 0.9rem;">Gestão de Facilities</p>
+                </div>
+              </div>
+            </div>
+             <div class="swiper-slide">
+              <div class="testimonial-card">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="review">"As câmeras de alta resolução cobriram todos os pontos cegos que tínhamos. O aplicativo de visualização no celular nunca travou."</p>
+                <div>
+                  <h4 style="font-size: 1.2rem;">Logística Express</h4>
+                  <p style="color: var(--text-muted); font-size: 0.9rem;">Gerência de Frota</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cobertura & Mapa -->
+    <section id="cobertura" style="padding: 120px 0; background: var(--bg-surface); border-top: 1px solid var(--border);">
+      <div class="container map-section">
+        <div data-aos="fade-right">
+          <h2 class="title-lg">Onde estamos e atendemos</h2>
+          <p class="subtitle" style="margin-bottom: 32px;">Atendemos de forma tática diversas regiões, garantindo um tempo de resposta baixíssimo para manutenções de emergência.</p>
+          <ul style="color: var(--text-main); font-size: 1.15rem; display: flex; flex-direction: column; gap: 20px;">
+            <li><i class="fa-solid fa-map-pin text-accent" style="margin-right: 16px;"></i> <strong>Sede:</strong> R. Francisco Dantas, 147 - São Paulo</li>
+            <li><i class="fa-solid fa-truck-fast text-accent" style="margin-right: 16px;"></i> Viaturas de pronto atendimento técnico</li>
+            <li><i class="fa-solid fa-clock text-accent" style="margin-right: 16px;"></i> Plantão especializado para ocorrências críticas</li>
+          </ul>
+        </div>
+        
+        <!-- REMOVED THE DARK CSS FILTER, NOW FULL COLOR -->
+        <div class="map-wrapper" data-aos="fade-left">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.27!2d-46.5512!3d-23.5398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5973c8e0d50f%3A0x0!2sR.+Francisco+Dantas%2C+147+-+Jardim+Gonzaga%2C+S%C3%A3o+Paulo+-+SP!5e0!3m2!1spt!2sbr!4v1700000000!5m2!1spt!2sbr"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Smart Contact Form -->
+    <section id="contato" style="padding: 120px 0;">
+      <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <h2 class="title-lg text-center" style="text-align: center;" data-aos="fade-up">Iniciar Projeto</h2>
+          <p class="subtitle" style="text-align: center; margin: 0 auto 64px;" data-aos="fade-up" data-aos-delay="100">Fale com nossos engenheiros para diagnosticar sua infraestrutura atual.</p>
+          
+          <form class="smart-form" id="contactForm" data-aos="zoom-in" data-aos-delay="200">
+            <div class="form-group">
+              <input type="text" id="fname" class="form-control" placeholder=" " required>
+              <label class="floating-label">Nome ou Empresa</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="tel" id="fphone" class="form-control" placeholder=" " required>
+              <label class="floating-label">WhatsApp</label>
+            </div>
+            
+            <div class="form-group">
+              <select id="fservice" class="form-control" style="color: var(--text-main);" required>
+                <option value="" disabled selected hidden></option>
+                <option style="background: var(--bg-surface);" value="Manutenção de Condomínio">Manutenção de Condomínio</option>
+                <option style="background: var(--bg-surface);" value="Sistema CFTV">Sistema CFTV</option>
+                <option style="background: var(--bg-surface);" value="Elétrica e Infra">Elétrica e Infra</option>
+                <option style="background: var(--bg-surface);" value="Interfones">Interfones</option>
+                <option style="background: var(--bg-surface);" value="Controle de Acesso">Controle de Acesso</option>
+              </select>
+              <label class="floating-label" style="top: -12px; left: 16px; font-size: 0.85rem; color: var(--accent); background: var(--bg-surface); padding: 0 8px; border-radius: 4px;">Qual a principal necessidade?</label>
+            </div>
+            
+            <div class="form-group">
+              <textarea id="fmsg" class="form-control" placeholder=" "></textarea>
+              <label class="floating-label">Descreva brevemente o cenário</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.15rem; height: 64px;">
+              Solicitar Contato Imediato
+            </button>
+            
+            <div class="lgpd-notice">
+              <i class="fa-solid fa-lock"></i> Seus dados estão criptografados e não serão compartilhados.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 16px;">ARD <span class="text-accent">System</span></h3>
+        <p style="color: var(--text-muted); font-size: 1rem; max-width: 320px;">A infraestrutura definitiva para condomínios e corporações. Alta disponibilidade e segurança 24h.</p>
+      </div>
+      <div>
+        <h4 style="margin-bottom: 24px; font-size: 1.1rem;">Soluções</h4>
+        <div class="footer-links">
+          <a href="#solucoes">Manutenção</a>
+          <a href="#solucoes">CFTV</a>
+          <a href="#solucoes">Elétrica</a>
+          <a href="#solucoes">Controle de Acesso</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="margin-bottom: 24px; font-size: 1.1rem;">Institucional</h4>
+        <div class="footer-links">
+          <a href="#diferencial">O Diferencial</a>
+          <a href="#autoridade">A Empresa</a>
+          <a href="#contato">Fale Conosco</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="wa-float-container">
+    <div class="wa-balloon">Olá, precisa de um orçamento para condomínio ou empresa?</div>
+    <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20infraestrutura." target="_blank" rel="noopener noreferrer" class="wa-btn" aria-label="Falar no WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // AOS Init
+    AOS.init({ duration: 900, once: true, offset: 50 });
+
+    // Swiper Testimonials Init
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      grabCursor: true,
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 }
+      }
+    });
+
+    // Header Scroll
+    const header = document.getElementById('mainHeader');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+
+    // Phone mask
+    document.getElementById('fphone').addEventListener('input', function(e) {
+      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+      e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+
+    // Form Submit
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('fname').value;
+      const tel = document.getElementById('fphone').value;
+      const servico = document.getElementById('fservice').value;
+      const msg = document.getElementById('fmsg').value;
+      
+      const texto = `Olá, sou *${nome}*.\nTelefone: ${tel}\nInteresse: *${servico}*\n\n${msg}`;
+      const encodedText = encodeURIComponent(texto);
+      window.open(`https://wa.me/5511999999999?text=${encodedText}`, '_blank');
+    });
+  </script>
+</body>
+</html>

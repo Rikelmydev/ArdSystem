@@ -134,10 +134,9 @@ header.scrolled {
   border-bottom: 1px solid var(--border);
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; }
-.logo { font-size: 1.15rem; display: inline-flex; align-items: baseline; gap: 8px; }
-.logo .logo-mark { font-family: var(--f-display); color: var(--text); font-weight: 800; letter-spacing: -0.01em; }
-.logo .logo-sep { color: var(--accent); }
-.logo .logo-sub { font-family: var(--f-mono); color: var(--text-muted); font-size: 0.68rem; letter-spacing: 0.16em; }
+.logo { display: inline-flex; align-items: center; }
+#mainHeader .logo { margin-left: -32px; }
+.site-logo { max-height: 140px; width: auto; object-fit: contain; }
 .nav-links { display: flex; gap: 36px; }
 .nav-links a { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--text-muted); transition: color 0.3s; }
 .nav-links a:hover { color: var(--text); }
@@ -425,10 +424,8 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 .splash-corner.tr { top: 32px; right: 32px; border-top: 1px solid; border-right: 1px solid; }
 .splash-corner.bl { bottom: 32px; left: 32px; border-bottom: 1px solid; border-left: 1px solid; }
 .splash-corner.br { bottom: 32px; right: 32px; border-bottom: 1px solid; border-right: 1px solid; }
-.splash-logo { font-size: 1.8rem; display: flex; align-items: baseline; gap: 10px; position: relative; z-index: 1; }
-.splash-logo .logo-mark { font-family: var(--f-display); color: var(--text); font-weight: 800; letter-spacing: -0.01em; }
-.splash-logo .logo-sep { color: var(--accent); }
-.splash-logo .logo-sub { font-family: var(--f-mono); color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.18em; }
+.splash-logo { display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+.splash-logo .site-logo { max-height: 260px; width: auto; }
 .splash-bar { width: 220px; height: 2px; background: var(--border); position: relative; overflow: hidden; border-radius: 2px; z-index: 1; }
 .splash-bar::after {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0%;

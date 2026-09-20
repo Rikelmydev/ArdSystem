@@ -52,6 +52,7 @@ window.addEventListener('scroll', () => {
 // Mobile Nav Toggle
 const navToggle = document.getElementById('navToggle');
 const mobileNav = document.getElementById('mobileNav');
+const mnavClose = document.getElementById('mnavClose');
 function closeMobileNav() {
   mobileNav.classList.remove('open');
   navToggle.classList.remove('active');
@@ -65,6 +66,7 @@ navToggle.addEventListener('click', () => {
   document.body.classList.toggle('no-scroll', isOpen);
 });
 mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+mnavClose.addEventListener('click', closeMobileNav);
 window.addEventListener('resize', () => {
   if (window.innerWidth > 1024) closeMobileNav();
 });

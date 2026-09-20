@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ardsystemtelecom.com.br/sitemap.xml

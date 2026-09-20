@@ -482,9 +482,9 @@ footer h4 { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.1e
   .diferencial-grid, .autoridade-grid, .map-section { grid-template-columns: 1fr; }
   .autoridade-grid { gap: 48px; }
   .autoridade-img { max-width: 420px; }
-  .hero-visual { margin-top: 48px; justify-content: flex-start; }
+  .hero-visual { margin-top: 48px; margin-bottom: 56px; justify-content: flex-start; }
   .monitor-frame { max-width: 340px; }
-  .hero { padding-top: 100px; text-align: left; }
+  .hero { padding-top: 100px; padding-bottom: 8px; text-align: left; }
   .nav-links { display: none; }
   .nav-toggle { display: flex; }
   .footer-grid { grid-template-columns: 1fr 1fr; }

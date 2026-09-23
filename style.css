@@ -296,20 +296,6 @@ body.menu-open { overflow: hidden; }
 .hero-facts li { display: flex; align-items: center; gap: 10px; font-size: .97rem; color: var(--text-2); }
 .hero-facts i { color: var(--accent-ink); width: 18px; text-align: center; }
 
-/* Painel de foto de produto — fundo claro para o equipamento "assentar" */
-.pshot {
-  position: relative;
-  background: radial-gradient(ellipse 80% 70% at 50% 45%, #FFFFFF 0%, #EDF0F5 60%, #E2E7EF 100%);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  overflow: hidden;
-  padding: 14px;
-}
-.pshot img {
-  width: 100%; height: 100%; object-fit: contain;
-  filter: drop-shadow(0 12px 16px rgba(16, 27, 54, .16));
-}
-
 /* =========================================================
    Marcas — esteira infinita
    ========================================================= */
@@ -321,9 +307,6 @@ body.menu-open { overflow: hidden; }
   display: flex; width: max-content;
   animation: marquee 26s linear infinite;
 }
-.brands:hover .brands-marquee,
-.brands:focus-within .brands-marquee { animation-play-state: paused; }
-
 .brands-track { display: flex; align-items: center; }
 .brands-track li { display: flex; align-items: center; padding: 0 28px; }
 .brands-track img {
@@ -434,8 +417,7 @@ body.menu-open { overflow: hidden; }
 /* =========================================================
    Cards de serviço
    ========================================================= */
-/* Cada card carrega a própria cor em --svc / --svc-soft (inline, no HTML).
-   A cor só aparece na interação: card em foco no carrossel ou sob o mouse. */
+/* ---------- estado neutro ---------- */
 .service {
   --svc: var(--accent-ink);
   --svc-soft: var(--accent-soft);
@@ -443,50 +425,55 @@ body.menu-open { overflow: hidden; }
   display: flex; flex-direction: column; height: auto;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--r-md);
   overflow: hidden; box-shadow: var(--shadow-sm);
-  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+  transform: translateY(0);
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
 }
+.service h3 { transition: color .3s var(--ease); }
 .service::after {
   content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; z-index: 2;
   background: var(--svc);
   transform: scaleX(0); transform-origin: left;
   transition: transform .45s var(--ease);
 }
-.service.is-active::after,
-.service:hover::after { transform: scaleX(1); }
-
-.service {
-  transform: translateY(0);
-  transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
-}
-.service.is-active,
-.service:hover {
-  border-color: var(--svc);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
-}
-.service.is-active .service-media img { transform: scale(1.04); }
-.service.is-active h3,
-.service:hover h3 { color: var(--svc); transition: color .3s var(--ease); }
 
 .service-media {
   aspect-ratio: 16 / 10; flex-shrink: 0;
   background: radial-gradient(ellipse 80% 70% at 50% 45%, #FFFFFF 0%, #EDF0F5 62%, #E2E7EF 100%);
   border-bottom: 1px solid var(--border);
-  padding: 16px;
-}
-.service-media {
+  /* As imagens já vêm em 16:10 com a margem embutida e a mesma área útil,
+     então preenchem a caixa exata — é isso que deixa os cinco alinhados. */
+  padding: 0;
   transition: background .45s var(--ease);
-}
-.service.is-active .service-media,
-.service:hover .service-media {
-  background: radial-gradient(ellipse 80% 70% at 50% 45%, #FFFFFF 0%, var(--svc-soft) 72%, var(--svc-soft) 100%);
 }
 .service-media img {
   width: 100%; height: 100%; object-fit: contain;
   filter: drop-shadow(0 12px 16px rgba(16, 27, 54, .16));
   transition: transform .4s var(--ease);
 }
-.service:hover .service-media img { transform: scale(1.04); }
+
+/* Onde existe mouse, a cor responde só ao ponteiro. O slide da vez NÃO é
+   destacado: senão o primeiro card já abriria colorido, sem ninguém tocar. */
+@media (hover: hover) and (pointer: fine) {
+  .service:hover { border-color: var(--svc); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .service:hover::after { transform: scaleX(1); }
+  .service:hover h3 { color: var(--svc); }
+  .service:hover .service-media {
+    background: radial-gradient(ellipse 80% 70% at 50% 45%, #FFFFFF 0%, var(--svc-soft) 72%, var(--svc-soft) 100%);
+  }
+  .service:hover .service-media img { transform: scale(1.04); }
+}
+
+/* Em tela de toque não existe hover, então quem recebe a cor é o card à
+   vista no carrossel — que no celular é justamente o que a pessoa deslizou. */
+@media (hover: none) {
+  .service.is-active { border-color: var(--svc); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .service.is-active::after { transform: scaleX(1); }
+  .service.is-active h3 { color: var(--svc); }
+  .service.is-active .service-media {
+    background: radial-gradient(ellipse 80% 70% at 50% 45%, #FFFFFF 0%, var(--svc-soft) 72%, var(--svc-soft) 100%);
+  }
+  .service.is-active .service-media img { transform: scale(1.04); }
+}
 
 .service-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
 .service-body h3 { font-size: 1.15rem; margin-bottom: 8px; }
@@ -617,9 +604,11 @@ body.menu-open { overflow: hidden; }
   border-radius: var(--r-md);
   transition: background-color .3s var(--ease), border-color .3s var(--ease);
 }
-.depo.is-active, .depo:hover {
-  background: rgba(255, 255, 255, .1);
-  border-color: rgba(255, 255, 255, .38);
+@media (hover: hover) and (pointer: fine) {
+  .depo:hover { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .38); }
+}
+@media (hover: none) {
+  .depo.is-active { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .38); }
 }
 
 .depo blockquote {
